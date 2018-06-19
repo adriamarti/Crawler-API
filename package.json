@@ -2,7 +2,7 @@
   "name": "books_restful_api",
   "version": "1.0.0",
   "description": "Books RESTful API that delivers single book info for each endpoint",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/amarti1986/books_RESTful_API#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.3",
+    "request": "^2.87.0"
   }
 }
