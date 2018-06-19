@@ -1,0 +1,22 @@
+{
+  "name": "books_restful_api",
+  "version": "1.0.0",
+  "description": "Books RESTful API that delivers single book info for each endpoint",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amarti1986/books_RESTful_API.git"
+  },
+  "author": "Adria Marti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amarti1986/books_RESTful_API/issues"
+  },
+  "homepage": "https://github.com/amarti1986/books_RESTful_API#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
