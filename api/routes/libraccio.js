@@ -2,11 +2,11 @@ const express = require('express');
 const request = require('request');
 const cheerio = require ('cheerio');
 const router = express.Router();
-const errors = require('../../errors/errors')
+const errors = require('../../errors/errors');
 
 router.get('/:isbn', (req, res, next) => {
-  const baseUrl = `https://www.libraccio.it/libro/`
-  const endpointUrl = `${baseUrl}${req.params.isbn}/`
+  const baseUrl = `https://www.libraccio.it/libro/`;
+  const endpointUrl = `${baseUrl}${req.params.isbn}/`;
 
   request(endpointUrl, (error, response, body) => {
     if (!error && response && response.statusCode == 200) {
