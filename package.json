@@ -4,7 +4,9 @@
   "description": "Books RESTful API that delivers single book info for each endpoint",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "deploy": "gcloud app deploy",
+    "startDev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
