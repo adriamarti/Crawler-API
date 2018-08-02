@@ -6,6 +6,7 @@ const errors = require('./errors/errors');
 const libraccioRoutes = require('./api/routes/libraccio');
 const mondadoriRoutes = require('./api/routes/mondadori');
 const lafeltrinelliRoutes = require('./api/routes/lafeltrinelli');
+const all = require('./api/routes/all');
 
 // Logs requests
 app.use(morgan('dev'));
@@ -27,6 +28,7 @@ app.use((req, res, next) => {
 app.use('/libraccio', libraccioRoutes);
 app.use('/mondadori', mondadoriRoutes);
 app.use('/lafeltrinelli', lafeltrinelliRoutes);
+app.use('/all', all);
 
 // Handle errors
 app.use((req, res, next) => {
