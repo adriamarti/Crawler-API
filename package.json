@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/amarti1986/books_RESTful_API#readme",
   "dependencies": {
+    "apac": "^3.0.2",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
     "morgan": "^1.9.0",
