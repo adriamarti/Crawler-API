@@ -13,9 +13,6 @@
     "type": "git",
     "url": "git+https://github.com/amarti1986/books_RESTful_API.git"
   },
-  "engines": {
-    "node": "9.x"
-  },
   "author": "Adria Marti",
   "license": "ISC",
   "bugs": {
