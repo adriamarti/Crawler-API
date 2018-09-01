@@ -1,6 +1,5 @@
 const requestPromise = require('request-promise');
 const cheerio = require ('cheerio');
-const errors = require('../../errors/errors');
 
 const baseUrl = `https://www.lafeltrinelli.it/fcom/it/home/pages/catalogo/searchresults.html?prkw=`;
 const affiliateURL = `http://tracker.tradedoubler.com/click?p=71740&a=3047763&g=0&url=`;
@@ -30,10 +29,20 @@ module.exports = function(isbn) {
           storeName: `lafeltrinelli`
         };
       } else {
-        return errors.productNotAvailable();
+        return {
+          price: `0,00`,
+          availability: false,
+          link: null,
+          storeName: `lafeltrinelli`
+        };
       }
     })
     .catch(function (err) {
-      return new Error(err);
+      return {
+        price: `0,00`,
+        availability: false,
+        link: null,
+        storeName: `lafeltrinelli`
+      };
     });
 };

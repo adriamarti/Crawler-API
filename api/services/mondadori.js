@@ -1,6 +1,5 @@
 const requestPromise = require('request-promise');
 const cheerio = require ('cheerio');
-const errors = require('../../errors/errors');
 
 const baseUrl = `https://www.mondadoristore.it/search/?g=`;
 const affiliateURL = `http://clkuk.tradedoubler.com/click?p(10388)a(3047763)g(19782026)url`;
@@ -30,10 +29,20 @@ module.exports = function(isbn) {
           storeName: `mondadori`
         }
       } else {
-        return errors.productNotAvailable()
+        return {
+          price: `0,00`,
+          availability: false,
+          link: null,
+          storeName: `mondadori`
+        };
       }
     })
     .catch(function (err) {
-      return new Error(err);
+      return {
+        price: `0,00`,
+        availability: false,
+        link: null,
+        storeName: `mondadori`
+      };
     });
 };

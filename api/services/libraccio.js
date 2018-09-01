@@ -1,6 +1,5 @@
 const requestPromise = require('request-promise');
 const cheerio = require ('cheerio');
-const errors = require('../../errors/errors');
 
 const baseUrl = `https://www.libraccio.it/libro/`;
 const affiliateURL = `http://clkuk.tradedoubler.com/click?p(238295)a(3047763)g(21294776)url`;
@@ -28,10 +27,20 @@ module.exports = function(isbn) {
           storeName: `libraccio`
         };
       } else {
-        return errors.productNotAvailable();
+        return {
+          price: `0,00`,
+          availability: false,
+          link: null,
+          storeName: `libraccio`
+        };
       }
     })
     .catch(function (err) {
-      return new Error(err);
+      return {
+        price: `0,00`,
+        availability: false,
+        link: null,
+        storeName: `libraccio`
+      };
     });
 };

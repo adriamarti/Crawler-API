@@ -1,5 +1,4 @@
 const express = require('express');
-const requestPromise = require('request-promise');
 const router = express.Router();
 const errors = require('../../errors/errors');
 const libraccioService = require('../services/libraccio');
@@ -103,12 +102,12 @@ router.get('/:isbn', (req, res, next) => {
     
           res.json(defineBestPrice(bookData));
         } catch (error) {
-          res.json(errors.productNotAvailable());
+          res.json({isbn: null});
         }
       })
 
   }).catch((err) => {
-      res.json(errors.productNotAvailable());
+      res.json({isbn: null});
   });
 });
 

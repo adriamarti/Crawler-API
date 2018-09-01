@@ -1,8 +1,8 @@
 const errors = {
-  productNotAvailable: () => {
+  productNotAvailable: function() {
     return new Error(`Not available`);
   },
-  notFound: () => {
+  notFound: function() {
     return new Error(`Not Found`);
   }
 };
