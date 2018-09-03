@@ -68,7 +68,14 @@ router.get('/:isbn', (req, res, next) => {
 
   amazonData.execute('ItemLookup', amazonConfig)
     .then((response) => {
-      const amazonBookData = response.result.ItemLookupResponse.Items.Item;
+      let amazonBookData = {};
+
+      if (Array.isArray(response.result.ItemLookupResponse.Items.Item)) {
+        const index = response.result.ItemLookupResponse.Items.Item.length - 1;
+        amazonBookData = response.result.ItemLookupResponse.Items.Item[index];
+      } else {
+        amazonBookData = response.result.ItemLookupResponse.Items.Item;
+      }
 
       bookData.title = amazonBookData.ItemAttributes.Title;
       bookData.author = amazonBookData.ItemAttributes.Author;
@@ -76,7 +83,7 @@ router.get('/:isbn', (req, res, next) => {
       bookData.imgURL = amazonBookData.LargeImage.URL;
       bookData.similarBooks = amazonBookData.SimilarProducts.SimilarProduct
 
-      if (amazonBookData.Offers) {
+      if (amazonBookData.OfferSummary && amazonBookData.OfferSummary.LowestNewPrice) {
         bookData.amazon = {
           price: amazonBookData.OfferSummary.LowestNewPrice.FormattedPrice.split(' ')[1],
           availability: true,
