@@ -14,13 +14,13 @@ const amazonData = new OperationHelper({
 });
 
 function defineBestPrice(bookData) {
-  let newBookData = bookData
-  let bestPrice = +bookData.amazon.price.replace(',', '')
-  let bestPriceStore = [`amazon`]
+  let newBookData = bookData;
+  let bestPrice = parseFloat(bookData.amazon.price.replace(',', '.'));
+  let bestPriceStore = [`amazon`];
   const prices = {
-    libraccio: +bookData.libraccio.price.replace(',', ''),
-    mondadori: +bookData.mondadori.price.replace(',', ''),
-    lafeltrinelli: +bookData.lafeltrinelli.price.replace(',', '')
+    libraccio: parseFloat(bookData.libraccio.price.replace(',', '.')),
+    mondadori: parseFloat(bookData.mondadori.price.replace(',', '.')),
+    lafeltrinelli: parseFloat(bookData.lafeltrinelli.price.replace(',', '.')),
   };
 
   Object.keys(prices).forEach((store) => {
