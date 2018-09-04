@@ -80,7 +80,7 @@ router.get('/:isbn', (req, res, next) => {
       bookData.title = amazonBookData.ItemAttributes.Title;
       bookData.author = amazonBookData.ItemAttributes.Author;
       bookData.publisher = amazonBookData.ItemAttributes.Publisher;
-      bookData.imgURL = amazonBookData.LargeImage ? amazonBookData.LargeImage.URL : '';
+      bookData.imgURL = amazonBookData.LargeImage ? amazonBookData.LargeImage.URL : false;
       bookData.similarBooks = amazonBookData.SimilarProducts.SimilarProduct
 
       if (amazonBookData.OfferSummary && amazonBookData.OfferSummary.LowestNewPrice) {
