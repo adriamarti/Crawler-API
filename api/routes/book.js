@@ -15,32 +15,37 @@ const amazonData = new OperationHelper({
 
 function defineBestPrice(bookData) {
   let newBookData = bookData;
-  let bestPrice = parseFloat(bookData.amazon.price.replace(',', '.'));
-  let bestPriceStore = [`amazon`];
-  const prices = {
-    libraccio: parseFloat(bookData.libraccio.price.replace(',', '.')),
-    mondadori: parseFloat(bookData.mondadori.price.replace(',', '.')),
-    lafeltrinelli: parseFloat(bookData.lafeltrinelli.price.replace(',', '.')),
-  };
 
-  Object.keys(prices).forEach((store) => {
-    if (prices[store] < bestPrice && bookData[store].availability) {
-      bestPrice = prices[store];
-      bestPriceStore = [store];
-    } else if (prices[store] === bestPrice && bookData[store].availability) {
-      bestPrice = prices[store];
-      bestPriceStore.push(store);
+  const storesPrice = [
+    { name: `amazon`, price: newBookData.amazon.price },
+    { name: `libraccio`, price: newBookData.libraccio.price },
+    { name: `mondadori`, price: newBookData.mondadori.price },
+    { name: `lafeltrinelli`, price: newBookData.lafeltrinelli.price }
+  ];
+  storesPrice.sort(function (a, b) {
+    if (a.price > b.price && a.price !== 0 && b.price !== 0) {
+      return 1;
+    }
+    if (a.price < b.price && a.price !== 0 && b.price !== 0) {
+      return -1;
+    }
+    if (a.price === 0) {
+      return 1;
+    }
+    // a must be equal to b
+    return 0;
+  });
+  
+  storesPrice.forEach((storePrice, index) => {
+    newBookData[storePrice.name].order = index + 1;
+    if (newBookData[storePrice.name].availability === false) {
+      newBookData[storePrice.name].bestOffer = false;
+    } else if (newBookData[storePrice.name].price === storesPrice[0].price) {
+      newBookData[storePrice.name].bestOffer = true;
+    } else {
+      newBookData[storePrice.name].bestOffer = false;
     }
   })
-
-  bestPriceStore.forEach((store) => {
-    newBookData[store].bestOffer = true;
-  })
-
-  if (!newBookData.amazon.bestOffer) newBookData.amazon.bestOffer = false;
-  if (!newBookData.libraccio.bestOffer) newBookData.libraccio.bestOffer = false;
-  if (!newBookData.mondadori.bestOffer) newBookData.mondadori.bestOffer = false;
-  if (!newBookData.lafeltrinelli.bestOffer) newBookData.lafeltrinelli.bestOffer = false;
 
   return newBookData;
 }
@@ -84,14 +89,18 @@ router.get('/:isbn', (req, res, next) => {
       bookData.similarBooks = amazonBookData.SimilarProducts.SimilarProduct
 
       if (amazonBookData.OfferSummary && amazonBookData.OfferSummary.LowestNewPrice) {
+        const priceString = amazonBookData.OfferSummary.LowestNewPrice.FormattedPrice.split(' ')[1];
+
         bookData.amazon = {
-          price: amazonBookData.OfferSummary.LowestNewPrice.FormattedPrice.split(' ')[1],
+          price: parseFloat(priceString.replace(',', '.')),
           availability: true,
           link: amazonBookData.DetailPageURL
         }
       } else {
+        const priceString = amazonBookData.ItemAttributes.ListPrice.FormattedPrice.split(' ')[1];
+
         bookData.amazon = {
-          price: amazonBookData.ItemAttributes.ListPrice.FormattedPrice.split(' ')[1],
+          price: parseFloat(priceString.replace(',', '.')),
           availability: false,
           link: amazonBookData.DetailPageURL
         }
@@ -106,7 +115,7 @@ router.get('/:isbn', (req, res, next) => {
               link: storeData.link
             };
           })
-    
+          
           res.json(defineBestPrice(bookData));
         } catch (error) {
           res.json({isbn: null});

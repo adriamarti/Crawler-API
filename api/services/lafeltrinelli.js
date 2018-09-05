@@ -17,20 +17,21 @@ module.exports = function(isbn) {
   return requestPromise(options)
     .then(function ($) {
       const $wrapper = $('.product-result .gtmContext');
-      const priceHTML = $wrapper.find('.gtmActualPrice').html();
+      const priceHTML = $wrapper.find('.gtmActualPrice').html().split(` `)[1];
+      const price = parseFloat(priceHTML.replace(',', '.'))
       const availability = priceHTML ? true : false;
       const link = $wrapper.find('.cover a').attr('href');
 
       if (priceHTML !== null) {
         return {
-          price: priceHTML.split(` `)[1],
+          price: price,
           availability: availability,
           link: `${affiliateURL}${link}`,
           storeName: `lafeltrinelli`
         };
       } else {
         return {
-          price: `0,00`,
+          price: 0,
           availability: false,
           link: null,
           storeName: `lafeltrinelli`
@@ -39,7 +40,7 @@ module.exports = function(isbn) {
     })
     .catch(function (err) {
       return {
-        price: `0,00`,
+        price: 0,
         availability: false,
         link: null,
         storeName: `lafeltrinelli`

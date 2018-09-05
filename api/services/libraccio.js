@@ -15,20 +15,21 @@ module.exports = function(isbn) {
     .then(function (fullResponse) {
       const $ = cheerio.load(fullResponse.body);
       const $wrapper = $('.contbody .boxproddetail .primg .detail table tbody');
-      const priceHTML = $wrapper.find('.prices .currentprice').html();
+      const priceHTML = $wrapper.find('.prices .currentprice').html().split(` `)[1];
+      const price = parseFloat(priceHTML.replace(',', '.'))
       const availability = $wrapper.find('.availability .availability-days .notavail').html() ? false : true;
       const link = fullResponse.request.uri.href;
 
       if (priceHTML !== null) {
         return {
-          price: priceHTML.split(` `)[1],
+          price: price,
           availability: availability,
           link: `${affiliateURL}(${link})`,
           storeName: `libraccio`
         };
       } else {
         return {
-          price: `0,00`,
+          price: 0,
           availability: false,
           link: null,
           storeName: `libraccio`
@@ -37,7 +38,7 @@ module.exports = function(isbn) {
     })
     .catch(function (err) {
       return {
-        price: `0,00`,
+        price: 0,
         availability: false,
         link: null,
         storeName: `libraccio`

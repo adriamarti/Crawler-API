@@ -16,21 +16,23 @@ module.exports = function(isbn) {
     .then(function (fullResponse) {
       const $ = cheerio.load(fullResponse.body);
       const $wrapper = $('.product-data');
-      const price = $wrapper.find('.new-price strong').html();
+      const priceEuros = $wrapper.find('.new-price strong').html();
       const priceDecimals = $wrapper.find('.new-price strong .decimals').html();
       const availability = $wrapper.find('.lightGreen strong').html() ? true : false;
+      const priceHTML = `${priceEuros.split(`<`)[0]}${priceDecimals.split(`<`)[0]}`;
+      const price = parseFloat(priceHTML.replace(',', '.'))
       const link = fullResponse.request.uri.href;
 
       if (price !== null && priceDecimals !== null) {
         return {
-          price: `${price.split(`<`)[0]}${priceDecimals.split(`<`)[0]}`,
+          price: price,
           availability: availability,
           link: `${affiliateURL}(${link.split(`?`)[0]})`,
           storeName: `mondadori`
         }
       } else {
         return {
-          price: `0,00`,
+          price: 0,
           availability: false,
           link: null,
           storeName: `mondadori`
@@ -39,7 +41,7 @@ module.exports = function(isbn) {
     })
     .catch(function (err) {
       return {
-        price: `0,00`,
+        price: 0,
         availability: false,
         link: null,
         storeName: `mondadori`
