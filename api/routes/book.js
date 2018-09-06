@@ -17,10 +17,10 @@ function defineBestPrice(bookData) {
   let newBookData = bookData;
 
   const storesPrice = [
-    { name: `amazon`, price: newBookData.amazon.price },
     { name: `libraccio`, price: newBookData.libraccio.price },
     { name: `mondadori`, price: newBookData.mondadori.price },
-    { name: `lafeltrinelli`, price: newBookData.lafeltrinelli.price }
+    { name: `lafeltrinelli`, price: newBookData.lafeltrinelli.price },
+    { name: `amazon`, price: newBookData.amazon.price }
   ];
   storesPrice.sort(function (a, b) {
     if (a.price > b.price && a.price !== 0 && b.price !== 0) {
