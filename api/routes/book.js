@@ -13,17 +13,9 @@ const amazonData = new OperationHelper({
   locale:    'IT'
 });
 
-function defineBestPrice(bookData) {
-  let newBookData = bookData;
-
-  const storesPrice = [
-    { name: `libraccio`, price: newBookData.libraccio.price },
-    { name: `mondadori`, price: newBookData.mondadori.price },
-    { name: `lafeltrinelli`, price: newBookData.lafeltrinelli.price },
-    { name: `amazon`, price: newBookData.amazon.price }
-  ];
-  storesPrice.sort(function (a, b) {
-    if (a.price > b.price && a.price !== 0 && b.price !== 0) {
+function sortPrices(allStoresPrice) {
+  return allStoresPrice.sort((a, b) => {
+    if (a.price > b.price && a.price !== 0 && b.price !== 0 ) {
       return 1;
     }
     if (a.price < b.price && a.price !== 0 && b.price !== 0) {
@@ -35,12 +27,28 @@ function defineBestPrice(bookData) {
     // a must be equal to b
     return 0;
   });
+}
+
+function defineBestPrice(bookData) {
+  let newBookData = bookData;
+
+  const storesData = [
+    { name: `mondadori`, price: newBookData.mondadori.price, availability: newBookData.mondadori.availability },
+    { name: `lafeltrinelli`, price: newBookData.lafeltrinelli.price, availability: newBookData.lafeltrinelli.availability },
+    { name: `amazon`, price: newBookData.amazon.price, availability: newBookData.amazon.availability },
+    { name: `libraccio`, price: newBookData.libraccio.price, availability: newBookData.libraccio.availability }
+  ];
+
+  const availableBooks = storesData.filter(storeData => storeData.availability);
+  const notAvailableBooks = storesData.filter(storeData => !storeData.availability);
+  const availableBooksSorted = sortPrices(availableBooks);
+  const storesDataSorted = availableBooksSorted.concat(notAvailableBooks);
   
-  storesPrice.forEach((storePrice, index) => {
+  storesDataSorted.forEach((storePrice, index) => {
     newBookData[storePrice.name].order = index + 1;
     if (newBookData[storePrice.name].availability === false) {
       newBookData[storePrice.name].bestOffer = false;
-    } else if (newBookData[storePrice.name].price === storesPrice[0].price) {
+    } else if (newBookData[storePrice.name].price === storesDataSorted[0].price) {
       newBookData[storePrice.name].bestOffer = true;
     } else {
       newBookData[storePrice.name].bestOffer = false;
