@@ -14,25 +14,37 @@ module.exports = function(isbn) {
   return requestPromise(options)
     .then(function (fullResponse) {
       const $ = cheerio.load(fullResponse.body);
-      const $wrapper = $('.contbody .boxproddetail .primg .detail table tbody');
+      const $wrapper = $('.contbody .boxproddetail');
+      const title = $wrapper.find('.detail h1').text();
+      const imgUrl = $wrapper.find('.imgitem a img').attr('src');
+      const author = $wrapper.find('.author a').text();
+      const publisher = $wrapper.find('.publisher a').text();
       const priceHTML = $wrapper.find('.prices .currentprice').html().split(` `)[1];
-      const price = parseFloat(priceHTML.replace(',', '.'))
+      const price = parseFloat(priceHTML.replace(',', '.'));
       const availability = $wrapper.find('.availability .availability-days .notavail').html() ? false : true;
       const link = fullResponse.request.uri.href;
 
       if (priceHTML !== null) {
         return {
-          price: price,
-          availability: availability,
-          link: `${affiliateURL}(${link})`,
-          storeName: `libraccio`
+          author: author,
+          imgURL: `https://${imgUrl}`,
+          publisher: publisher,
+          title: title,
+          libraccio: {
+            price: price,
+            availability: availability,
+            link: `${affiliateURL}(${link})`,
+            storeName: `libraccio`
+          }
         };
       } else {
         return {
-          price: 0,
-          availability: false,
-          link: null,
-          storeName: `libraccio`
+          libraccio: {
+            price: price,
+            availability: availability,
+            link: `${affiliateURL}(${link})`,
+            storeName: `libraccio`
+          }
         };
       }
     })
