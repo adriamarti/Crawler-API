@@ -15,7 +15,11 @@ module.exports = function(isbn) {
   return requestPromise(options)
     .then(function (fullResponse) {
       const $ = cheerio.load(fullResponse.body);
-      const $wrapper = $('.product-data');
+      const $wrapper = $('.wrapper');
+      const title = $wrapper.find('.title').text();
+      const imgUrl = $wrapper.find('.is-book').attr('src');
+      const author = $wrapper.find('.nti-author').text();
+      const publisher = $wrapper.find('.nti-editor').text();
       const priceEuros = $wrapper.find('.new-price strong').html();
       const priceDecimals = $wrapper.find('.new-price strong .decimals').html();
       const availability = $wrapper.find('.lightGreen strong').html() ? true : false;
@@ -25,10 +29,16 @@ module.exports = function(isbn) {
 
       if (price !== null && priceDecimals !== null) {
         return {
-          price: price,
-          availability: availability,
-          link: `${affiliateURL}(${link.split(`?`)[0]})`,
-          storeName: `mondadori`
+          author: author,
+          imgURL: `https://www.mondadoristore.it/${imgUrl}`,
+          publisher: publisher,
+          title: title,
+          mondadori: {
+            price: price,
+            availability: availability,
+            link: `${affiliateURL}(${link.split(`?`)[0]})`,
+            storeName: `mondadori`
+          }
         }
       } else {
         return {

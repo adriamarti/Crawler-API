@@ -50,10 +50,12 @@ module.exports = function(isbn) {
     })
     .catch(function (err) {
       return {
-        price: 0,
-        availability: false,
-        link: null,
-        storeName: `libraccio`
+        libraccio: {
+          price: 0,
+          availability: false,
+          link: null,
+          storeName: `libraccio`
+        }
       };
     });
 };
